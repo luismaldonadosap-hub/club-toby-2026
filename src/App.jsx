@@ -375,7 +375,7 @@ Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
       })
       const data = await res.json()
       const text = data.content?.filter(c=>c.type==='text').map(c=>c.text).join('')||''
-      const clean = text.replace(/```json|```/g,'').trim()
+      const clean = text.replace(/```json|```/g,'').replace(/^[^{]*/,'').replace(/[^}]*$/,'').trim()
       const parsed = JSON.parse(clean)
       if (!parsed.played) { setAiMsg(parsed.message||'Torneo no iniciado.') }
       else if (parsed.matches?.length) {
