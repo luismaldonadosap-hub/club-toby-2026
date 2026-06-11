@@ -364,7 +364,7 @@ export default function App() {
 'anthropic-dangerous-direct-browser-access': 'true',
 },
         body: JSON.stringify({
-          model:'claude-sonnet-4-20250514', max_tokens:2000,
+          model:'claude-sonnet-4-6', max_tokens:2000,
           tools:[{type:'web_search_20250305',name:'web_search'}],
           messages:[{role:'user',content:`Busca resultados reales de la Copa del Mundo FIFA 2026 (empieza 11 jun 2026). 
 Devuelve SOLO JSON sin markdown:
