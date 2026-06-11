@@ -358,7 +358,11 @@ export default function App() {
     setAiLoading(true); setAiMsg('')
     try {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST', headers:{'Content-Type':'application/json'},
+        method:'POST', headers:{'Content-Type':'application/json',
+'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
+'anthropic-version': '2023-06-01',
+'anthropic-dangerous-direct-browser-access': 'true',
+},
         body: JSON.stringify({
           model:'claude-sonnet-4-20250514', max_tokens:2000,
           tools:[{type:'web_search_20250305',name:'web_search'}],
