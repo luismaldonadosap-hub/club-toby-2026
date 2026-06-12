@@ -1308,3 +1308,4 @@ Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
     </div>
   )
 }
+// viernes, 12 de junio de 2026, 10:02:50 CEST
