@@ -424,7 +424,7 @@ if (m) {
             })
           }
         }
-        loadMatches()setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
+setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
 await loadMatches()
       }
     } catch(e) { setAiMsg('Error al obtener resultados.') }
