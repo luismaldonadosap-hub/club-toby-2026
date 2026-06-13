@@ -424,8 +424,14 @@ if (m) {
             })
           }
         }
-setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
-await loadMatches()
+await loadMatches()setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
+const { data: freshData } = await supabase.from('matches').select('*')
+if (freshData) {
+  setMatches(prev => prev.map(m => {
+    const row = freshData.find(r => r.id === m.id)
+    return row ? { ...m, s1:row.s1||'', s2:row.s2||'', pen1:row.pen1||'', pen2:row.pen2||'' } : m
+  }))
+}
       }
     } catch(e) { setAiMsg('Error al obtener resultados.') }
     setAiLoading(false)
