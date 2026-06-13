@@ -418,6 +418,7 @@ Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
           if (m) await updateMatchScore(m.id,'s1',String(pm.s1)).then(()=>updateMatchScore(m.id,'s2',String(pm.s2)))
         }
         setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
+        loadMatches()
       }
     } catch(e) { setAiMsg('Error al obtener resultados.') }
     setAiLoading(false)
