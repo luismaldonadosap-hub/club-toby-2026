@@ -415,7 +415,14 @@ Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
       else if (parsed.matches?.length) {
         for (const pm of parsed.matches) {
           const m = matches.find(x => x.grp===pm.grp && x.t1===pm.t1 && x.t2===pm.t2 && x.phase===pm.phase)
-          if (m) await updateMatchScore(m.id,'s1',String(pm.s1)).then(()=>updateMatchScore(m.id,'s2',String(pm.s2)))
+if (m) {
+            await supabase.from('matches').upsert({
+              id: m.id, phase: m.phase, grp: m.grp,
+              t1: m.t1, t2: m.t2,
+              s1: String(pm.s1), s2: String(pm.s2),
+              pen1: m.pen1||'', pen2: m.pen2||''
+            })
+          }
         }
         setAiMsg(`✅ ${parsed.matches.length} resultado(s) actualizados y guardados en la nube.`)
         loadMatches()
