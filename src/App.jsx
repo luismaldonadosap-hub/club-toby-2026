@@ -317,13 +317,14 @@ export default function App(){
           'anthropic-dangerous-direct-browser-access':'true',
         },
         body:JSON.stringify({
-          model:'claude-sonnet-4-6',max_tokens:2000,
-          tools:[{type:'web_search_20250305',name:'web_search'}],
-          messages:[{role:'user',content:`Busca resultados reales de la Copa del Mundo FIFA 2026 (empieza 11 jun 2026).
-Devuelve SOLO JSON sin markdown:
+          model:'claude-sonnet-4-6',max_tokens:500,
+          tools:[{type:'web_search_20250305',name:'web_search',max_uses:2}],
+          Devuelve SOLO JSON sin markdown:
 Sin partidos: {"played":false,"message":"..."}
 Con partidos: {"played":true,"matches":[{"phase":"groups","grp":"A","t1":"México","t2":"Sudáfrica","s1":2,"s2":0},...]}
-Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
+Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]messages:[{role:'user',content:`Resultados Copa Mundial FIFA 2026 hoy. SOLO JSON:
+{"played":true,"matches":[{"phase":"groups","grp":"A","t1":"México","t2":"Sudáfrica","s1":2,"s2":0}]}
+o {"played":false}`}]
         })
       })
       const data=await res.json()
