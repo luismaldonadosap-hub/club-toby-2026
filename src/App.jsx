@@ -442,9 +442,18 @@ o {"played":false}`}]
 
   const winProb=useMemo(()=>{
     if(playerStats.length===0) return{}
-    const totalMax=playerStats.reduce((s,p)=>s+p.max,0)
+    const scores=playerStats.map(p=>({
+      nick:p.nick,
+      score: p.current*0.7 + p.max*0.3
+    }))
+    const totalScore=scores.reduce((s,p)=>s+p.score,0)
     const probs={}
-    playerStats.forEach(p=>{probs[p.nick]=totalMax>0?Math.round((p.max/totalMax)*100):0})
+    scores.forEach(p=>{probs[p.nick]=totalScore>0?Math.round((p.score/totalScore)*100):0})
+    const total=Object.values(probs).reduce((s,v)=>s+v,0)
+    if(total!==100&&scores.length>0){
+      const topNick=scores.sort((a,b)=>b.score-a.score)[0].nick
+      probs[topNick]+=100-total
+    }
     return probs
   },[playerStats])
 
