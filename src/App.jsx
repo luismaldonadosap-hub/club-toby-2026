@@ -441,19 +441,20 @@ Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
 
   const winProb=useMemo(()=>{
     if(playerStats.length===0) return{}
-    // Score combines current points (weighted 70%) and max possible (weighted 30%)
+    const totalCurrent=playerStats.reduce((s,p)=>s+p.current,0)
+    const totalMax=playerStats.reduce((s,p)=>s+p.max,0)
+    const useMax = totalCurrent===0
     const scores=playerStats.map(p=>({
       nick:p.nick,
-      score: p.current*0.7 + p.max*0.3
+      score: useMax ? p.max : (p.current*0.85 + p.max*0.15)
     }))
     const totalScore=scores.reduce((s,p)=>s+p.score,0)
     const probs={}
     scores.forEach(p=>{probs[p.nick]=totalScore>0?Math.round((p.score/totalScore)*100):0})
-    // Fix rounding so total = 100%
     const total=Object.values(probs).reduce((s,v)=>s+v,0)
     if(total!==100&&scores.length>0){
-      const topNick=scores.sort((a,b)=>b.score-a.score)[0].nick
-      probs[topNick]+=100-total
+      const sorted=[...scores].sort((a,b)=>b.score-a.score)
+      probs[sorted[0].nick]+=100-total
     }
     return probs
   },[playerStats])
