@@ -317,14 +317,13 @@ export default function App(){
           'anthropic-dangerous-direct-browser-access':'true',
         },
         body:JSON.stringify({
-          model:'claude-sonnet-4-6',max_tokens:500,
-          tools:[{type:'web_search_20250305',name:'web_search',max_uses:2}],
-          Devuelve SOLO JSON sin markdown:
+          model:'claude-sonnet-4-6',max_tokens:2000,
+          tools:[{type:'web_search_20250305',name:'web_search'}],
+          messages:[{role:'user',content:`Busca resultados reales de la Copa del Mundo FIFA 2026 (empieza 11 jun 2026).
+Devuelve SOLO JSON sin markdown:
 Sin partidos: {"played":false,"message":"..."}
 Con partidos: {"played":true,"matches":[{"phase":"groups","grp":"A","t1":"México","t2":"Sudáfrica","s1":2,"s2":0},...]}
-Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]messages:[{role:'user',content:`Resultados Copa Mundial FIFA 2026 hoy. SOLO JSON:
-{"played":true,"matches":[{"phase":"groups","grp":"A","t1":"México","t2":"Sudáfrica","s1":2,"s2":0}]}
-o {"played":false}`}]
+Para eliminatorias usa phase: r32/r16/qf/sf/tp/final y omite grp.`}]
         })
       })
       const data=await res.json()
@@ -442,6 +441,7 @@ o {"played":false}`}]
 
   const winProb=useMemo(()=>{
     if(playerStats.length===0) return{}
+    // Score combines current points (weighted 70%) and max possible (weighted 30%)
     const scores=playerStats.map(p=>({
       nick:p.nick,
       score: p.current*0.7 + p.max*0.3
@@ -449,6 +449,7 @@ o {"played":false}`}]
     const totalScore=scores.reduce((s,p)=>s+p.score,0)
     const probs={}
     scores.forEach(p=>{probs[p.nick]=totalScore>0?Math.round((p.score/totalScore)*100):0})
+    // Fix rounding so total = 100%
     const total=Object.values(probs).reduce((s,v)=>s+v,0)
     if(total!==100&&scores.length>0){
       const topNick=scores.sort((a,b)=>b.score-a.score)[0].nick
