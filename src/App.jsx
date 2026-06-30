@@ -251,8 +251,15 @@ export default function App(){
 
   async function loadAllQuinielas(){
     try{
-      const {data}=await supabase.from('quiniela').select('*')
-      if(data) setAllQuinielas(data)
+      let from=0
+      const pageSize=1000
+      while(true){
+        const {data,error}=await supabase.from('quiniela').select('*').range(from,from+pageSize-1)
+        if(error||!data||data.length===0) break
+        setAllQuinielas(prev=>from===0?data:[...prev,...data])
+        if(data.length<pageSize) break
+        from+=pageSize
+      }
     }catch(e){}
   }
 
@@ -536,6 +543,23 @@ export default function App(){
     }).sort((a,b)=>b.pts-a.pts)
   },[allQuinielas,matches])
 
+  // Ranking solo desde Ronda de 32 en adelante (para apuestas Club de Toby)
+  const rankingKnockout=useMemo(()=>{
+    const users=[...new Set(allQuinielas.map(r=>r.nickname))]
+    const knockoutPhases=['r32','r16','qf','sf','tp','final']
+    return users.map(nick=>{
+      let pts=0
+      matches.forEach(m=>{
+        if(!knockoutPhases.includes(m.phase)) return
+        if(m.s1===''||m.s2==='') return
+        const q=allQuinielas.find(r=>r.nickname===nick&&r.match_id===m.id)
+        const badge=getBadge(m,q)
+        if(badge) pts+=badge.pts
+      })
+      return{nick,pts}
+    }).sort((a,b)=>b.pts-a.pts)
+  },[allQuinielas,matches])
+
   // ── PRONÓSTICOS ───────────────────────────────────────────
   const allNicknames=[...new Set(allQuinielas.map(r=>r.nickname))]
   const PLAYER_COLORS=['#42a5f5','#69f0ae','#ff7043','#ce93d8','#ffca28','#26c6da','#ef5350','#66bb6a','#ffa726','#ab47bc']
@@ -598,6 +622,7 @@ export default function App(){
     {id:'bracket',label:'🌐 Bracket'},
     {id:'quiniela',label:'🎯 Quiniela'},
     {id:'ranking',label:'🥇 Ranking'},
+    {id:'rankingko',label:'🏅 Ranking Eliminatorias'},
     {id:'pronosticos',label:'👁 Pronósticos'},
     {id:'estadisticas',label:'📈 Estadísticas'},
     ...(isAdmin?[{id:'adminpanel',label:'⚙️ Admin'}]:[]),
@@ -954,6 +979,28 @@ export default function App(){
             {ranking.length===0&&<div style={{padding:20,textAlign:'center',color:'#546e7a',fontSize:13}}>Aún no hay participantes.</div>}
             {ranking.map(({nick,pts},i)=>(
               <div key={nick} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',borderTop:'1px solid #1e3a5f',background:nick===nickname?'rgba(21,101,192,0.2)':'transparent'}}>
+                <span style={{fontWeight:800,fontSize:18,width:28,textAlign:'center',color:i===0?'#ffd600':i===1?'#b0bec5':i===2?'#ff8a65':'#546e7a'}}>
+                  {i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}
+                </span>
+                <span style={{flex:1,fontWeight:nick===nickname?700:400}}>{nick}{nick===nickname&&' (tú)'}</span>
+                <span style={{fontWeight:800,fontSize:18,color:'#fff'}}>{pts} <span style={{fontSize:12,color:'#546e7a'}}>pts</span></span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* ── RANKING ELIMINATORIAS (solo Club de Toby) ── */}
+        {tab==='rankingko'&&(
+          <div style={{background:'#0d1b2a',borderRadius:12,overflow:'hidden',border:'1px solid #1e3a5f'}}>
+            <div style={{background:'linear-gradient(90deg,#7b1fa2,#ad1457)',padding:'10px 16px',fontWeight:800,fontSize:14,color:'#fff'}}>
+              🏅 Ranking Eliminatorias (solo R32 en adelante)
+            </div>
+            <div style={{padding:'8px 16px',fontSize:11,color:'#ce93d8',borderBottom:'1px solid #1e3a5f'}}>
+              💰 Este ranking no incluye los puntos de la fase de grupos — solo cuenta desde la Ronda de 32.
+            </div>
+            {rankingKnockout.length===0&&<div style={{padding:20,textAlign:'center',color:'#546e7a',fontSize:13}}>Aún no hay resultados eliminatorios.</div>}
+            {rankingKnockout.map(({nick,pts},i)=>(
+              <div key={nick} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 16px',borderTop:'1px solid #1e3a5f',background:nick===nickname?'rgba(123,31,162,0.2)':'transparent'}}>
                 <span style={{fontWeight:800,fontSize:18,width:28,textAlign:'center',color:i===0?'#ffd600':i===1?'#b0bec5':i===2?'#ff8a65':'#546e7a'}}>
                   {i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}
                 </span>
