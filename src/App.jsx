@@ -520,7 +520,7 @@ export default function App(){
     if(q1===r1&&q2===r2) return{pts:3,color:'#69f0ae',label:'✅ +3'}
     const rR=r1>r2?'1':r1<r2?'2':'X'
     const qR=q1>q2?'1':q1<q2?'2':'X'
-    if(rR===qR&&rR!=='X') return{pts:1,color:'#ffeb3b',label:'🟡 +1'}
+    if(rR===qR) return{pts:1,color:'#ffeb3b',label:'🟡 +1'}
     return{pts:0,color:'#ef5350',label:'❌ +0'}
   }
 
