@@ -8,7 +8,7 @@ const LOCK_DATE = new Date('2026-06-11T21:00:00Z')
 const PHASE_LOCK_DATES = {
   groups: new Date('2026-06-11T21:00:00Z'),
   r32:    new Date('2026-06-28T19:55:00Z'),
-  r16:    new Date('2026-07-04T17:55:00Z'),
+  r16:    new Date('2026-07-04T00:00:00Z'),
   qf:     new Date('2026-07-08T17:55:00Z'),
   sf:     new Date('2026-07-11T19:55:00Z'),
   final:  new Date('2026-07-18T18:55:00Z'),
