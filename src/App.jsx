@@ -65,9 +65,8 @@ const BRACKET_TREE = {
   r16: [
     {next:'qf',idx:0,pos:0},{next:'qf',idx:0,pos:1},{next:'qf',idx:1,pos:0},{next:'qf',idx:1,pos:1},
     {next:'qf',idx:2,pos:0},{next:'qf',idx:2,pos:1},{next:'qf',idx:3,pos:0},{next:'qf',idx:3,pos:1},
-  ],
-  qf: [
-    {next:'sf',idx:0,pos:0},{next:'sf',idx:0,pos:1},{next:'sf',idx:1,pos:0},{next:'sf',idx:1,pos:1},
+  ],qf: [
+    {next:'sf',idx:0,pos:0},{next:'sf',idx:1,pos:0},{next:'sf',idx:0,pos:1},{next:'sf',idx:1,pos:1},
   ],
   sf: [
     {next:'final',idx:0,pos:0},{next:'final',idx:0,pos:1},
