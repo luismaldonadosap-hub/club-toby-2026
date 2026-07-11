@@ -10,8 +10,8 @@ const PHASE_LOCK_DATES = {
   r32:    new Date('2026-06-28T19:55:00Z'),
   r16:    new Date('2026-07-04T00:00:00Z'),
   qf:     new Date('2026-07-08T17:55:00Z'),
-  sf:     new Date('2026-07-11T19:55:00Z'),
-  final:  new Date('2026-07-18T18:55:00Z'),
+  sf:     new Date('2026-07-14T18:55:00Z'),
+  final:  new Date('2026-07-19T18:55:00Z'),
 }
 
 const PHASE_NAMES = {
