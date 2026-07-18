@@ -925,6 +925,7 @@ export default function App(){
                 {id:'r16',label:'⚔️ Octavos'},
                 {id:'qf',label:'🏅 Cuartos'},
                 {id:'sf',label:'🌟 Semis'},
+                {id:'tp',label:'🥉 3er Puesto'},
                 {id:'final',label:'🏆 Final'},
               ].map(p=>{
                 const open=isPhaseOpen(p.id)
